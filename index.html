@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Stoplight by customink</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Stoplight</h1>
+        <p>Hook it up to your builds and see their status from anywhere in the room</p>
+        <p class="view"><a href="https://github.com/customink/stoplight">View the Project on GitHub <small>customink/stoplight</small></a></p>
+        <ul>
+          <li><a href="https://github.com/customink/stoplight/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/customink/stoplight/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/customink/stoplight">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Stoplight</h1>
+
+<p><a href="http://travis-ci.org/customink/greenscreen"><img src="https://secure.travis-ci.org/customink/greenscreen.png?branch=master" alt="Build Status"></a></p>
+
+<h2>Introduction</h2>
+
+<p>Stoplight is a build monitoring tool that is largely based off <a href="https://github.com/martinjandrews/greenscreen">greenscreen</a>, but is much improved and expandable. To quickly name a few, Stoplight has:</p>
+
+<ul>
+<li>built-in support for <a href="http://www.jenkis-ci.org">Jenkins</a>
+</li>
+<li>built-in support for Travis-CI(<a href="http://travis-ci.org">http://travis-ci.org</a>)</li>
+<li>custom provider support</li>
+<li>community contributions</li>
+<li>full test suite</li>
+<li>resuable DSL</li>
+</ul><p>Stoplight is designed to be displayed on large television screens or monitors. It automatically resizes to fill the maximum real estate the screen can offer.</p>
+
+<h2>Installation</h2>
+
+<p>Stoplight is a Rack application, so you'll need to install Ruby and Rubygems before you can run Stoplight. <strong>Stoplight requires Ruby 1.9.x</strong>.</p>
+
+<p>Start by cloning the application repository:</p>
+
+<pre><code>git clone git@github.com:customink/stoplight.git
+</code></pre>
+
+<p>And then bundle all the application's dependencies:</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Next, copy the <code>config/servers.yml.example</code> file to <code>config/servers.yml</code>:</p>
+
+<pre><code>cp config/servers.yml.example config/servers.yml
+</code></pre>
+
+<p>If you want to get up and running quickly and just see what Stoplight looks like, add the following to your configuration file. It will pull from Travis CI:</p>
+
+<div class="highlight">
+<pre><span class="p-Indicator">-</span>
+  <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="s">'travis'</span>
+  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://travis-ci.org/repositories.json</span>
+</pre>
+</div>
+
+
+<p>Start the server with the <code>rackup</code> command:</p>
+
+<pre><code>rackup ./config.ru
+</code></pre>
+
+<p>Navigate to <code>http://localhost:9292</code> and check it out! You should see the status of a bunch of builds. The screen will refresh every 15 seconds to keep itself up to date.</p>
+
+<h2>Configuration</h2>
+
+<p>All configuration options are specified through the <code>config/servers.yml</code> file we copied over before. There's significant documentation in that file on how to configure your servers.</p>
+
+<p>All servers must specify a <code>type</code> option. This tells Stoplight what provider it should use. For example, if you are using Travis CI, your provider is <code>Travis</code> and the server type is <code>travis</code>. If you were using a custom server, the configuration might look like:</p>
+
+<div class="highlight">
+<pre><span class="p-Indicator">-</span>
+  <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="s">'my_server'</span>
+  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">'...'</span>
+</pre>
+</div>
+
+
+<p>This would look for a provider named <code>MyServer</code> under <code>lib/stoplight/providers</code>. For more information on writing a custom provider, see the <strong>Contributing</strong> section.</p>
+
+<p>If you have a lot of projects, you may want to selective display them on Stoplight. Luckily, this is just a simple configuration option. To ignore certain projects, just add the <code>ignored_projects</code> field to the config. It even supports regular expressions:</p>
+
+<div class="highlight">
+<pre><span class="p-Indicator">-</span>
+  <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="s">'travis'</span>
+  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">'http://travis-ci.org/repositories.json'</span>
+  <span class="l-Scalar-Plain">ignored_projects</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/^rails-(.*)$/</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">some_other_project</span>
+</pre>
+</div>
+
+
+<p>Conversely, you can choose to only show certain projects with the <code>projects</code> option:</p>
+
+<div class="highlight">
+<pre><span class="p-Indicator">-</span>
+  <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="s">'jenkins'</span>
+  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">'http://jenkins.mycompany.com/cc.xml'</span>
+  <span class="l-Scalar-Plain">projects</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/^public-(.*)$/</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">some_other_project</span>
+</pre>
+</div>
+
+
+<h2>Contributing</h2>
+
+<p>One of the larger goals of Stoplight was to server the open source community. As more Continuous Integration servers emerge, we needed a common DSL for interacting with them. This all arose when we wanted to add Travis CI support to Greenscreen. Greenscreen was written for CI's that conform to a standard that doesn't even exist anymore. Stoplight doesn't care how the data comes in from the provider!</p>
+
+<p>A <code>Provider</code> is really just a ruby class that defines two methods:</p>
+
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">MyProvider</span> <span class="o">&lt;</span> <span class="no">Provider</span>
+  <span class="k">def</span> <span class="nf">provider</span>
+    <span class="s1">'my provider'</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">projects</span>
+    <span class="c1"># logic here</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<p>The <code>provider</code> method is just a utility method that returns the name of the provider. The <code>projects</code> method is the "magical" method. This is where a developer parses the data into the given specification. You should take a look in <code>lib/stoplight/providers/sample.rb</code> for a good starting point.</p>
+
+<p>The development environment is configured with all kinds of goodies like Spork, Guard, and Foreman. If you're developing, just run <code>foreman start</code> and code! As you write tests and code, Guard will run the tests, Spork will make it fast, and Growl will tell you if they passed or failed!</p>
+
+<h2>Deployment</h2>
+
+<p>Deploying Green Screen to <a href="http://www.heroku.com">Heroku</a> is a snap.</p>
+
+<p>Of course, if your build servers aren't publicly accessible, Heroku won't be a great option. A <a href="http://community.opscode.com/cookbooks/greenscreen">Chef Cookbook for deploying Green Screen</a> is available on <a href="http://community.opscode.com/cookbooks/greenscreen">the Opscode Community site</a>.  You can read more about both options in <a href="http://nathenharvey.com/blog/2012/01/02/deploying-green-screen/">Nathen Harvey's blog</a>. Note that Greenscreen and Stoplight can be deployed in the same manner.</p>
+
+<h2>Credits</h2>
+
+<ul>
+<li>GreenScreen was original developed by <a href="https://github.com/martinjandrews/greenscreen/">martinjandrews</a>.</li>
+<li>The former version of GreenScreen was a fork of the updates made by <a href="https://github.com/rsutphin/greenscreen/">rsutphin</a>.</li>
+<li>This version of Stoplight was written by <a href="https://github.com/sethvargo">sethvargo</a>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/customink">customink</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
