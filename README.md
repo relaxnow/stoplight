@@ -67,7 +67,7 @@ If you have a lot of projects, you may want to selective display them on Stoplig
 ```yml
 -
   type: 'travis'
-  url: 'http://travis-ci.org'
+  url: 'http://api.travis-ci.org'
   ignored_projects:
     - /^rails-(.*)$/
     - some_other_project
@@ -87,7 +87,7 @@ Conversely, you can choose to only show certain projects with the `projects` opt
 ### Configuration for Travis CI
 For public repos on travis-ci.org use the sample config provided (see above).
 
-For private repos on travis-ci.com, you will need an access token for the Travis CI api. As the corresponding API endpoints have not been implemented yet, the easiest way is to first create a Github access token and then use this to generate a TravisCI access token:
+For private repos on travis-ci.com, you will need an access token for the Travis CI api. As the corresponding API endpoints have not been implemented yet, the easiest way is to first create a Github access token and then use this to generate a Travis CI access token:
 
 - Get a GitHub access token (see [this GitHub help page](https://help.github.com/articles/creating-an-access-token-for-command-line-use))
 - Send a POST request to https://api.travis-ci.com/auth/github with the github token as the github_token parameter:
@@ -96,7 +96,7 @@ For private repos on travis-ci.com, you will need an access token for the Travis
 curl -d "github_token=your-github-token" https://api.travis-ci.com/auth/github
 ```
 
-- use the token from the response as the value for "access_token" in your servers.yml file
+- Use the token from the response as the value for "access_token" in your servers.yml file.
 
 Contributing
 ------------
