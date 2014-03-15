@@ -8,14 +8,14 @@ describe MultiProjectStandard do
     MultiProjectStandard.superclass.should == Provider
   end
 
-  context 'provider' do
+  describe '#provider' do
     it 'should raise an exception' do
       provider = MultiProjectStandard.new('url' => 'http://ci.jenkins-ci.org')
       lambda { provider.provider }.should raise_error(Stoplight::Exceptions::NoProviderError)
     end
   end
 
-  context 'builds_path' do
+  describe '#builds_path' do
     it 'should set the builds_path if an option is specified' do
       provider = MultiProjectStandard.new('url' => 'http://ci.jenkins-ci.org', 'builds_path' => 'foobar.xml')
       provider.builds_path.should == 'foobar.xml'
@@ -27,7 +27,7 @@ describe MultiProjectStandard do
     end
   end
 
-  context 'projects' do
+  describe '#projects' do
     before do
       @provider = MultiProjectStandard.new('url' => 'http://ci.jenkins-ci.org/view/All')
     end

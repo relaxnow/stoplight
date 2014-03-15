@@ -8,7 +8,7 @@ describe Jenkins do
     Jenkins.superclass.should == MultiProjectStandard
   end
 
-  context 'provider' do
+  describe '#provider' do
     it 'should return the correct provider name' do
       provider = Jenkins.new('url' => 'http://ci.jenkins-ci.org')
       provider.provider.should == 'jenkins'

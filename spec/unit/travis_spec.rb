@@ -8,17 +8,17 @@ describe Travis do
     Travis.superclass.should == Provider
   end
 
-  context 'provider' do
+  describe '#provider' do
     it 'should return the correct provider name' do
       provider = Travis.new('url' => 'http://travis-ci.org')
       provider.provider.should == 'travis'
     end
   end
 
-  context 'projects' do
+  describe '#projects' do
     context 'with no :owner_name query' do
       before do
-        @provider = Travis.new('url' => 'http://travis-ci.org')
+        @provider = Travis.new('url' => 'http://travis-ci.org', 'build_url' => 'http://travis-ci.org')
       end
 
       it 'should return an array of Stoplight::Project' do

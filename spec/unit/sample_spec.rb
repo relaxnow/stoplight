@@ -7,14 +7,14 @@ include Stoplight::Providers
 describe Sample do
   use_vcr_cassette 'sample', :record => :new_episodes
 
-  context 'provider' do
+  describe '#provider' do
     it 'should return the correct provider name' do
       provider = Sample.new('url' => 'http://www.example.com')
       provider.provider.should == 'sample'
     end
   end
 
-  context 'projects' do
+  describe '#projects' do
     it 'should return an array of Stoplight::Project' do
       provider = Sample.new('url' => 'http://www.example.com')
 
