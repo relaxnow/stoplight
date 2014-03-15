@@ -61,6 +61,12 @@ describe Provider do
           provider.response.request.options[:query][:owner_name].should == 'my_owner_name'
         end
 
+        it 'should set :access_token' do
+          stub_request(:any, 'http://www.example.com/?owner_name=my_owner_name&access_token=my_access_token').to_return(:status => 200)
+          provider = Provider.new('url' => 'http://www.example.com', 'owner_name' => 'my_owner_name', 'access_token' => 'my_access_token')
+          provider.response.request.options[:query][:access_token].should == 'my_access_token'
+        end
+
         it 'should not set an unknown key' do
           provider = Provider.new('url' => 'http://www.example.com', 'not_an_allowed_key' => 'should_never_see_this')
           provider.response.request.options[:query].should be_nil

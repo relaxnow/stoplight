@@ -19,18 +19,31 @@
 #   ignored_projects:
 #     - not_me  # ignore the project named "not_me"
 
-
-# Example Travis configuration
+# Example Travis CI configuration (for public repos on travis-ci.org)
 # -
 #   type: 'travis'
 #   url: https://api.travis-ci.org
+#   build_url: https://travis-ci.org
 #   owner_name: my_projects # usually your github username
 #   projects:
 #     - mail    # build named "mail"
 #     - /^test/ # all builds starting with "test"
 #   ignored_projects:
 #     - not_me  # ignore the project named "not_me"
-#
+
+# Example Travis CI configuration (for private repos on travis-ci.com)
+# -
+#   type: 'travis'
+#   url: https://api.travis-ci.com
+#   build_url: https://magnum.travis-ci.com
+#   access_token: your_api_access_token (see README)
+#   owner_name: my_projects # usually your github username
+#   projects:
+#     - mail    # build named "mail"
+#     - /^test/ # all builds starting with "test"
+#   ignored_projects:
+#     - not_me  # ignore the project named "not_me"
+
 # Example Thoughtworks Go Configuration
 # -
 #   type: 'thoughtworks_go'

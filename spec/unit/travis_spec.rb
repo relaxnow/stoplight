@@ -18,7 +18,7 @@ describe Travis do
   context 'projects' do
     context 'with no :owner_name query' do
       before do
-        @provider = Travis.new('url' => 'http://travis-ci.org')
+        @provider = Travis.new('url' => 'http://travis-ci.org', 'build_url' => 'http://travis-ci.org')
       end
 
       it 'should return an array of Stoplight::Project' do

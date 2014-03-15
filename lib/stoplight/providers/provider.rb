@@ -69,6 +69,10 @@ module Stoplight::Providers
         }
       end
 
+      if @options['access_token']
+        url_options[:query].merge!({:access_token => @options['access_token']})
+      end
+
       url_options[:http_proxyaddr] ||= @options['http_proxyaddr']
       url_options[:http_proxyport] ||= @options['http_proxyport']
       url_options[:http_proxyuser] ||= @options['http_proxyuser']

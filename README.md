@@ -31,13 +31,14 @@ Next, copy the `config/servers.example.yml` file to `config/servers.yml`:
 
     cp config/servers.example.yml config/servers.yml
 
-If you want to get up and running quickly and just see what Stoplight looks like, add the following to your configuration file. It will pull from Travis CI:
+If you want to get up and running quickly and just see what Stoplight looks like, add the following to your configuration file. It will pull data from the public repos of the Travis CI project itself:
 
 ```yaml
 -
   type: 'travis'
-  url: http://travis-ci.org
-  owner_name: github_username
+  url: https://api.travis-ci.org
+  build_url: https://travis-ci.org
+  owner_name: travis-ci
 ```
 
 Start the server with the `rackup` command:
@@ -82,6 +83,20 @@ Conversely, you can choose to only show certain projects with the `projects` opt
     - /^public-(.*)$/
     - some_other_project
 ```
+
+### Configuration for Travis CI
+For public repos on travis-ci.org use the sample config provided (see above).
+
+For private repos on travis-ci.com, you will need an access token for the Travis CI api. As the corresponding API endpoints have not been implemented yet, the easiest way is to first create a Github access token and then use this to generate a TravisCI access token:
+
+- Get a GitHub access token (see [this GitHub help page](https://help.github.com/articles/creating-an-access-token-for-command-line-use))
+- Send a POST request to https://api.travis-ci.com/auth/github with the github token as the github_token parameter:
+
+```bash
+curl -d "github_token=your-github-token" https://api.travis-ci.com/auth/github
+```
+
+- use the token from the response as the value for "access_token" in your servers.yml file
 
 Contributing
 ------------
