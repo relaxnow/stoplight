@@ -6,7 +6,7 @@ describe Provider do
     stub_request(:any, 'http://www.example.com').to_return(:status => 200)
   end
 
-  context 'initialize' do
+  describe '#initialize' do
     context 'with no parameters' do
       it 'should require a :url parameter' do
         lambda { Provider.new }.should raise_error(ArgumentError)
@@ -116,7 +116,7 @@ describe Provider do
     end
   end
 
-  context 'projects' do
+  describe '#projects' do
     it 'should raise an exception' do
       provider = Provider.new('url' => 'http://www.example.com')
       lambda { provider.projects }.should raise_error(Stoplight::Exceptions::NoParserError)

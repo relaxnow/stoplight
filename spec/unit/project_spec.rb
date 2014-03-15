@@ -2,7 +2,7 @@ require 'spec_helper'
 include Stoplight
 
 describe Project do
-  context 'initialize' do
+  describe '#initialize' do
     it 'should work when options is empty' do
       project = Project.new
 
@@ -33,7 +33,7 @@ describe Project do
     end
   end
 
-  context 'parse_date' do
+  describe '#parse_date' do
     it 'should work for a valid date' do
       project = Project.new(:last_build_time => '2012-05-05T07:58:22Z')
       project.last_build_time.should == DateTime.parse('2012-05-05T07:58:22Z')
@@ -54,7 +54,7 @@ describe Project do
     end
   end
 
-  context 'last_build_status' do
+  describe '#last_build_status' do
     it 'should work for a build status of 0 (passed)' do
       project = Project.new(:last_build_status => 0)
       project.last_build_status.should == 'passed'
@@ -76,7 +76,7 @@ describe Project do
     end
   end
 
-  context 'current_status' do
+  describe '#current_status' do
     it 'should work for a current status of 0 (done)' do
       project = Project.new(:current_status => 0)
       project.current_status = 'done'
@@ -98,7 +98,7 @@ describe Project do
     end
   end
 
-  context 'building?' do
+  describe '#building?' do
     it 'should return true when the project is building' do
       project = Project.new(:current_status => 1)
       project.building?.should == true
@@ -115,7 +115,7 @@ describe Project do
     end
   end
 
-  context 'built?' do
+  describe '#built?' do
     it 'should return true when the project is built' do
       project = Project.new(:current_status => 0)
       project.built?.should == true
@@ -132,7 +132,7 @@ describe Project do
     end
   end
 
-  context 'passed?' do
+  describe '#passed?' do
     it 'should return true when the build passed' do
       project = Project.new(:last_build_status => 0)
       project.passed?.should == true
@@ -149,7 +149,7 @@ describe Project do
     end
   end
 
-  context 'failed?' do
+  describe '#failed?' do
     it 'should return true when the build fails' do
       project = Project.new(:last_build_status => 1)
       project.failed?.should == true
