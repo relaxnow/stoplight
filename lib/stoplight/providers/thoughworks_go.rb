@@ -28,7 +28,7 @@ module Stoplight::Providers
     #  end
     #end
 
-      def projects
+    def projects
       xmlHash = Crack::XML.parse(@response)
       xmlHash["Projects"]["Project"].collect do |project|
         Stoplight::Project.new({
@@ -38,15 +38,18 @@ module Stoplight::Providers
                                    :last_build_time => project['lastBuildTime'],
                                    :last_build_status => status_to_int(project['lastBuildStatus']),
                                    :current_status => activity_to_int(project['activity']),
-                                   :culprits =>  @options['culprits'] ? get_culprits(project) : []
+                                   :culprits => get_culprits(project)
                                })
       end
     end
 
     private
     def get_culprits project
-      return [] if project['messages'].nil?
-      return project['messages']['message']['text']
+      if !project['messages'].nil?
+        return project['messages']['message']['text']
+      else
+        return []
+      end
     end
   end
 end
