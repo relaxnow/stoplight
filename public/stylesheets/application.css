@@ -53,7 +53,7 @@ html, body {
 }
 
 h1 {
-    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-family: 'Whitney', sans-serif;
     white-space: nowrap
 }
 
@@ -193,7 +193,7 @@ aside#projects-list a.ignored time.last-build-time {
 }
 
 #projects-board {
-    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-family: 'Whitney', sans-serif;
     padding: 5px;
     position: absolute;
     top: 0;
