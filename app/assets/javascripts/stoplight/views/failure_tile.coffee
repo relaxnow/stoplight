@@ -12,6 +12,7 @@ class Views.FailureTile extends Backbone.View
         </h1>
         <p class="status">
           Build {{ last_build_id }} <strong>{{ last_build_status }}</strong>
+          broken by <strong>{{ culprits }}</strong>
           <time class="build-time invisible" datetime="{{ last_build_time }}" title="{{ human_last_build_time }}">
             {{ human_last_build_time }}
           </time>

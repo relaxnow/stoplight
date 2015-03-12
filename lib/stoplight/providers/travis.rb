@@ -4,9 +4,22 @@
 # Travis does not conform to the multi-project reporting spec, so
 # we need to define our own provider
 #
+require 'travis'
+
+TravisClient = Travis;
 
 module Stoplight::Providers
+  include TravisClient
   class Travis < Provider
+    # Initializes a hash `@options` of default options
+    def initialize(options = {})
+      if options['url'].nil?
+        raise ArgumentError, "'url' must be supplied as an option to the Provider. Please add 'url' => '...' to your hash."
+      end
+
+      @options = options
+    end
+
     def provider
       'travis'
     end
@@ -16,20 +29,39 @@ module Stoplight::Providers
     end
 
     def projects
-      if @response.nil? || @response.parsed_response.nil?
-        @projects ||= []
+      if (@options['build_url'] || '').include? "magnum"
+        TravisClient::Pro.access_token = @options['access_token']
+        repositories = TravisClient::Pro::Repository.find_all(owner_name: @options['owner_name']);
       else
-        @projects ||= @response.parsed_response.collect do |project|
-          Stoplight::Project.new({
-            :name => project['slug'].split(/\//).last,
-            :build_url => "#{@options['build_url']}/#{project['slug']}",
-            :last_build_id => project['last_build_number'].to_s,
-            :last_build_time => project['last_build_finished_at'],
-            :last_build_status => status_to_int(project['last_build_status']),
-            :current_status => current_status_to_int(project['last_build_finished_at'])
-          })
-        end
+        TravisClient.access_token = @options['access_token']
+        repositories = TravisClient::Repository.find_all(owner_name: @options['owner_name']);
       end
+
+      @projects = @projects || []
+
+      repositories.each do |repository|
+        name = repository.slug.split(/\//).last;
+        if @options['projects'] and not @options['projects'].include? name
+          next
+        end
+
+        culprits = ''
+        if repository.last_build
+          culprits = repository.last_build.commit.author_name
+        end
+
+        @projects << Stoplight::Project.new({
+             :name => name,
+             :build_url => "#{@options['build_url']}/#{repository['slug']}",
+             :last_build_id => repository.last_build_number.to_s,
+             :last_build_time => repository.last_build_finished_at.to_s,
+             :last_build_status => status_to_int(repository.last_build_state),
+             :current_status => repository.last_build_state === "failed" ? -1 : 0,
+             :culprits => culprits
+         })
+      end
+
+      @projects
     end
 
     private
